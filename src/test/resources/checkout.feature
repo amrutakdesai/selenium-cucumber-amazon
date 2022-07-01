@@ -10,3 +10,13 @@ Feature:  Few products of the same type in shopping chart
     And I go to checkout
     Then I should see proper product name on item list
     And I sould see proper final price
+
+
+  Scenario:New Feature Add
+    Given I am on Amazon page
+    And I go to category ""
+    When I select position 5
+    And I add it to shopping chart in quantity of 8
+    And I go to checkout
+    Then I should see proper product name on item list
+    And I sould see proper final price

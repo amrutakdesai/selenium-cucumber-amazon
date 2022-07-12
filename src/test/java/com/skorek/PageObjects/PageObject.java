@@ -10,8 +10,7 @@ public class PageObject {
     public PageObject(WebDriver driver)
     {
         WebDriverManager.chromedriver().setup();
-
         this.driver = driver;
-              PageFactory.initElements(driver, this);
+        PageFactory.initElements(driver, this);
     }
 }

@@ -22,8 +22,11 @@ public class MainPage extends PageObject {
     }
 
     public ProductCategoryPage goToProductCategory(String category){
-        String category_xpath = String.format("//span[contains(text(), \"%s\")]/parent::h2/following-sibling::span/a", category);
-        driver.findElement(By.xpath(category_xpath)).click();
+        String searchCategory_xpath=String.format("twotabsearchtextbox",category);
+        driver.findElement(By.id(searchCategory_xpath)).sendKeys(category);
+
+        String category_xpath = String.format("nav-search-submit-button", category);
+        driver.findElement(By.id(category_xpath)).click();
         return new ProductCategoryPage(driver);
     }
 }

@@ -4,13 +4,14 @@ import com.skorek.PageObjects.CheckoutPage;
 import com.skorek.PageObjects.MainPage;
 import com.skorek.PageObjects.ProductCategoryPage;
 import com.skorek.PageObjects.ProductPage;
-import cucumber.api.Scenario;
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.lang3.SystemUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -23,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 public class StepDefinition {
     private static WebDriver driver;
+
     private String product_name;
     private BigDecimal product_price;
     private int number_of_products;
@@ -32,18 +34,24 @@ public class StepDefinition {
     private ProductPage productPage;
     private CheckoutPage checkoutPage;
 
-    private static void setUpWebdriverVariables() {
-        if (SystemUtils.IS_OS_LINUX) {
-            File f = new File("WebDriver/Linux/chromedriver");
-            System.setProperty("webdriver.chrome.driver", f.getAbsolutePath());
+    private static void setUpWebdriverVariables()
+    {
+        if (SystemUtils.IS_OS_LINUX)
+        {
+//            File f = new File("WebDriver/Linux/chromedriver");
+//            System.setProperty("webdriver.chrome.driver", f.getAbsolutePath());
+            WebDriverManager.chromedriver().setup();
+
         }
         if (SystemUtils.IS_OS_WINDOWS) {
-            File f = new File("WebDriver/Windows/chromedriver.exe");
-            System.setProperty("webdriver.chrome.driver", f.getAbsolutePath());
+           // File f = new File("WebDriver/Windows/chromedriver.exe");
+           // System.setProperty("webdriver.chrome.driver", f.getAbsolutePath());
+            WebDriverManager.chromedriver().setup();
         }
         if (SystemUtils.IS_OS_MAC) {
-            File f = new File("WebDriver/MacOS/chromedriver");
-            System.setProperty("webdriver.chrome.driver", f.getAbsolutePath());
+//            File f = new File("WebDriver/MacOS/chromedriver");
+//            System.setProperty("webdriver.chrome.driver", f.getAbsolutePath());
+            WebDriverManager.chromedriver().setup();
         }
     }
 
@@ -55,13 +63,15 @@ public class StepDefinition {
     }
 
     @After
-    public static void cleanUp(Scenario scenario){
+    public static void cleanUp(Scenario s){
 
-        if (scenario.isFailed()) {
-            scenario.embed(((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES), "image/png");
-            scenario.write("Test failed");
-        }else{
-            scenario.write("Test passed");
+        if (s.isFailed()) {
+            TakesScreenshot scrnShot = (TakesScreenshot)driver;
+            byte[] data = scrnShot.getScreenshotAs(OutputType.BYTES);
+            s.attach(data, "image/png","Failed Step Name: " + s.getName());
+        }
+        else{
+            s.log("Test passed");
         }
 
         driver.close();
@@ -75,7 +85,7 @@ public class StepDefinition {
         mainPage = new MainPage(driver);
     }
 
-    @And("^I go to category \"([^\"]*)\"$")
+    @And("^I go to search \"([^\"]*)\"$")
     public void iGoToCategory(String category) {
         productCategoryPage = mainPage.goToProductCategory(category);
     }
@@ -92,7 +102,7 @@ public class StepDefinition {
     public void i_add_it_to_shopping_chart_in_quantity_of(int quantity) throws InterruptedException {
         number_of_products = quantity;
 
-        productPage.setQuantity(quantity);
+        productPage.setQuantity(number_of_products);
         productPage.clickAddToChartAndDeclineCoverage();
     }
 
@@ -114,4 +124,4 @@ public class StepDefinition {
 
         assert multiply_price.compareTo(checkoutPrice) == 0;
     }
-}
+   }

@@ -10,22 +10,24 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.math.BigDecimal;
+import java.util.concurrent.TimeUnit;
 
 public class ProductPage extends PageObject {
+    WebDriverWait wait;
     public ProductPage(WebDriver driver){
         super(driver);
     }
 
-    @FindBy(xpath = "//*[@id=\"productTitle\"]")
+    @FindBy(xpath = "//span[@id='productTitle']")
     private WebElement productNameElement;
 
-    @FindBy(xpath = "//*[@id=\"priceblock_ourprice\"]")
+    @FindBy(xpath = "//span[@class='a-price aok-align-center']//span[@class='a-price-whole']")
     private WebElement productPriceElement;
 
-    @FindBy(xpath = "//*[@id=\"quantity\"]")
+    @FindBy(id = "quantity")
     private WebElement quantityMenu;
 
-    @FindBy(xpath = "//*[@id=\"add-to-cart-button\"]")
+    @FindBy(xpath = "//input[@id='add-to-cart-button']")
     private WebElement addToChartButton;
 
     @FindBy(xpath = "//*[@id=\"siNoCoverage-announce\"]")
@@ -38,14 +40,16 @@ public class ProductPage extends PageObject {
         return productNameElement.getText();
     }
 
-    public BigDecimal getProductPrice(){
+    public BigDecimal getProductPrice()
+    {
         String product_price_text = productPriceElement.getText();
+        System.out.println(product_price_text);
         product_price_text = product_price_text.replace("$", "").replace(",", "");
         Double priceInDouble = Double.parseDouble(product_price_text);
         return new BigDecimal(priceInDouble).setScale(2);
     }
 
-    public void setQuantity(int quantity){
+    public void setQuantity(int quantity) throws InterruptedException {
         Select quantitySelect = new Select(quantityMenu);
         quantitySelect.selectByValue(Integer.toString(quantity));
     }
@@ -53,13 +57,15 @@ public class ProductPage extends PageObject {
     public void clickAddToChartAndDeclineCoverage() throws InterruptedException {
         addToChartButton.click();
         Thread.sleep(1000);  //ugly hack but nothing reasonable works
-        WebDriverWait wait = new WebDriverWait(driver, 3);
-        try {
+         wait = new WebDriverWait(driver, 2000);
+        try
+        {
             wait.until(ExpectedConditions.visibilityOf(noCoverangeButton));
             noCoverangeButton.click();
         }
-        catch (org.openqa.selenium.TimeoutException e){
-            driver.findElement(By.xpath("//*[@id=\"a-popover-6\"]/div/div[1]/button")).click();
+        catch (org.openqa.selenium.TimeoutException e)
+        {
+            driver.findElement(By.xpath("//*[@id='a-popover-6']/div/div[1]/button")).click();
         }
         wait.until(ExpectedConditions.visibilityOf(proceedToCheckoutButton));
             }

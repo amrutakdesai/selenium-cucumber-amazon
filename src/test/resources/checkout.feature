@@ -4,7 +4,7 @@ Feature:  Few products of the same type in shopping chart
 
   Scenario:
     Given I am on Amazon page
-    And I go to category "Digital Cameras best sellers"
+    And I go to search "laptop"
     When I select position 5
     And I add it to shopping chart in quantity of 8
     And I go to checkout
@@ -14,9 +14,15 @@ Feature:  Few products of the same type in shopping chart
 
   Scenario:New Feature Add
     Given I am on Amazon page
-    And I go to category ""
+    And I go to search "Mobiles"
     When I select position 5
     And I add it to shopping chart in quantity of 8
     And I go to checkout
     Then I should see proper product name on item list
     And I sould see proper final price
+
+
+
+
+
+

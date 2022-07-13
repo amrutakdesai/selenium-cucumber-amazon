@@ -4,6 +4,7 @@ import com.skorek.PageObjects.CheckoutPage;
 import com.skorek.PageObjects.MainPage;
 import com.skorek.PageObjects.ProductCategoryPage;
 import com.skorek.PageObjects.ProductPage;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
@@ -20,6 +21,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class StepDefinition {
@@ -85,10 +87,18 @@ public class StepDefinition {
         mainPage = new MainPage(driver);
     }
 
-    @And("^I go to search \"([^\"]*)\"$")
-    public void iGoToCategory(String category) {
-        productCategoryPage = mainPage.goToProductCategory(category);
-    }
+//    @And("^I go to search \"([^\"]*)\"$")
+//    public void iGoToCategory(String category) {
+//        productCategoryPage = mainPage.goToProductCategory(category);
+//    }
+@Given("I go to search <product>")
+public void i_go_to_search_product(DataTable dataTable) {
+    List<String> data = dataTable.asList();
+ //   productCategoryPage = mainPage.goToProductCategory(data.get(0));
+
+    productCategoryPage = mainPage.goToProductCategory(data.get(1));
+}
+
 
     @When("^I select position (\\d+)$")
     public void i_select_position(int position) {

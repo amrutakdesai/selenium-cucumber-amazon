@@ -1,9 +1,9 @@
 package com.skorek.PageObjects;
 
 public class newClass {
-    public setup()
+    public void setup()
     {
-        System.out.println("");
+        System.out.println("hi");
     }
 
 }

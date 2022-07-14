@@ -118,6 +118,7 @@ public void i_go_to_search_product(DataTable dataTable) {
 
     @When("^I go to checkout$")
     public void i_go_to_checkout()  {
+
         checkoutPage = productPage.goToCheckout();
     }
 

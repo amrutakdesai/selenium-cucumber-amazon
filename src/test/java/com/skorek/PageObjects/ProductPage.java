@@ -74,8 +74,4 @@ public class ProductPage extends PageObject {
         driver.get("https://www.amazon.com/gp/cart/view.html/ref=nav_cart");
         return new CheckoutPage(driver);
     }
-
-
-
-
 }

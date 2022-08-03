@@ -23,6 +23,7 @@ public class MainPage extends PageObject {
 
     public ProductCategoryPage goToProductCategory(String category){
         String searchCategory_xpath=String.format("twotabsearchtextbox",category);
+        System.out.println(category);
         driver.findElement(By.id(searchCategory_xpath)).sendKeys(category);
 
         String category_xpath = String.format("nav-search-submit-button", category);
